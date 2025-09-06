@@ -7,7 +7,7 @@ class Stack {
     int capacity;   
 
 public:
-    // constructor
+
     Stack(int size) {
         capacity = size;
         top = -1;   
