@@ -1,22 +1,61 @@
 #include <iostream>
-#include <cstring>
+#include <stack>
+#include <string>
 using namespace std;
-#define MAX 100
-char stack[MAX];int top=-1;
-void push(char c){stack[++top]=c;}
-char pop(){return stack[top--];}
-int prec(char c){if(c=='+'||c=='-')return 1;if(c=='*'||c=='/')return 2;return 0;}
-int main(){
-    char infix[100],postfix[100];cin>>infix;
-    int k=0,n=strlen(infix);
-    for(int i=0;i<n;i++){
-        char c=infix[i];
-        if(isalnum(c))postfix[k++]=c;
-        else if(c=='(')push(c);
-        else if(c==')'){while(top!=-1&&stack[top]!='(')postfix[k++]=pop();top--;}
-        else{while(top!=-1&&prec(stack[top])>=prec(c))postfix[k++]=pop();push(c);}
+
+int precedence(char op) {
+    if (op == '+' || op == '-') return 1;
+    if (op == '*' || op == '/') return 2;
+    if (op == '^') return 3;
+    return 0;
+}
+
+bool isOperator(char c) {
+    return (c == '+' || c == '-' || c == '*' || c == '/' || c == '^');
+}
+
+string infixToPostfix(string infix) {
+    stack<char> s;
+    string postfix = "";
+
+    for (char ch : infix) {
+        if (isalnum(ch)) {
+            postfix += ch;
+        }
+        else if (ch == '(') {
+            s.push(ch);
+        }
+        else if (ch == ')') {
+            while (!s.empty() && s.top() != '(') {
+                postfix += s.top();
+                s.pop();
+            }
+            if (!s.empty()) s.pop();
+        }
+        else if (isOperator(ch)) {
+            while (!s.empty() && precedence(s.top()) >= precedence(ch)) {
+                postfix += s.top();
+                s.pop();
+            }
+            s.push(ch);
+        }
     }
-    while(top!=-1)postfix[k++]=pop();
-    postfix[k]='\0';
-    cout<<postfix;
+
+    while (!s.empty()) {
+        postfix += s.top();
+        s.pop();
+    }
+
+    return postfix;
+}
+
+int main() {
+    string infix;
+    cout << "Enter an infix expression: ";
+    cin >> infix;
+
+    string postfix = infixToPostfix(infix);
+    cout << "Postfix expression: " << postfix << endl;
+
+    return 0;
 }
