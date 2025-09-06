@@ -1,17 +1,41 @@
 #include <iostream>
-#include <cstring>
+#include <stack>
+#include <string>
 using namespace std;
-#define MAX 100
-char stack[MAX];int top=-1;
-void push(char c){stack[++top]=c;}
-char pop(){return stack[top--];}
-int main(){
-    char exp[100];
-    cin>>exp;
-    int n=strlen(exp);
-    for(int i=0;i<n;i++){
-        if(exp[i]=='(')push('(');
-        else if(exp[i]==')'){if(top==-1){cout<<"Not Balanced";return 0;}pop();}
+
+bool isBalanced(string expr) {
+    stack<char> s;
+
+    for (char ch : expr) {
+        if (ch == '(' || ch == '[' || ch == '{') {
+            s.push(ch);
+        } 
+        else if (ch == ')' || ch == ']' || ch == '}') {
+            if (s.empty()) return false;
+
+            char top = s.top();
+            s.pop();
+
+            if ((ch == ')' && top != '(') ||
+                (ch == ']' && top != '[') ||
+                (ch == '}' && top != '{')) {
+                return false;
+            }
+        }
     }
-    if(top==-1)cout<<"Balanced";else cout<<"Not Balanced";
+
+    return s.empty();
+}
+
+int main() {
+    string expr;
+    cout << "Enter an expression: ";
+    cin >> expr;
+
+    if (isBalanced(expr))
+        cout << "Balanced expression" << endl;
+    else
+        cout << "Not balanced" << endl;
+
+    return 0;
 }
