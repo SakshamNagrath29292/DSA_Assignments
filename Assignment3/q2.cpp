@@ -1,14 +1,57 @@
 #include <iostream>
 #include <cstring>
 using namespace std;
-#define MAX 100
-char stack[MAX];int top=-1;
-void push(char c){if(top<MAX-1)stack[++top]=c;}
-char pop(){return stack[top--];}
-int main(){
-    char s[100];
-    cin>>s;
-    int n=strlen(s);
-    for(int i=0;i<n;i++)push(s[i]);
-    while(top!=-1)cout<<pop();
+
+class Stack {
+    char arr[100];
+    int top;
+    int capacity;
+
+public:
+    Stack(int size) {
+        capacity = size;
+        top = -1;
+    }
+
+    bool isEmpty() {
+        return top == -1;
+    }
+
+    bool isFull() {
+        return top == capacity - 1;
+    }
+
+    void push(char ch) {
+        if (!isFull()) {
+            arr[++top] = ch;
+        }
+    }
+
+    char pop() {
+        if (!isEmpty()) {
+            return arr[top--];
+        }
+        return '\0'; 
+    }
+};
+
+int main() {
+    char str[100];
+    cout << "Enter a string: ";
+    cin.getline(str, 100);
+
+    int len = strlen(str);
+    Stack s(len);
+
+    for (int i = 0; i < len; i++) {
+        s.push(str[i]);
+    }
+
+    cout << "Reversed string: ";
+    while (!s.isEmpty()) {
+        cout << s.pop();
+    }
+    cout << endl;
+
+    return 0;
 }
