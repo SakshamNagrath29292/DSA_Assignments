@@ -1,126 +1,120 @@
 #include <iostream>
-
 using namespace std;
 
-bool isFull(int rear, int maxqueue) {
-    return (rear == maxqueue - 1);
+bool checkEmpty(int frontIndex, int backIndex) {
+    return (frontIndex == -1 || frontIndex > backIndex);
 }
 
-bool isEmpty(int front, int rear) {
-    return (front == -1 || front > rear);
+bool checkFull(int backIndex, int maxSize) {
+    return (backIndex == maxSize - 1);
 }
 
-void enqueue(int queue[], int &front, int &rear, int maxqueue) {
-    if (isFull(rear, maxqueue)) {
-        cout << "Queue is full (Overflow)" << endl;
-        return;
-    }
-    if (front == -1) {
-        front = 0;
-    }
-    int item;
-    cout << "Enter the number to be added: ";
-    cin >> item;
-    rear++;
-    queue[rear] = item;
-    cout << item << " has been enqueued." << endl;
-}
-
-int dequeue(int queue[], int &front, int &rear) {
-    if (isEmpty(front, rear)) {
+int removeElement(int arr[], int &frontIndex, int &backIndex) {
+    if (checkEmpty(frontIndex, backIndex)) {
         return -1;
     }
-    int item = queue[front];
-    front++;
-    if (front > rear) {
-        front = -1;
-        rear = -1;
+    int element = arr[frontIndex];
+    frontIndex++;
+    if (frontIndex > backIndex) {
+        frontIndex = -1;
+        backIndex = -1;
     }
-    return item;
+    return element;
 }
 
-void peek(int queue[], int front, int rear) {
-    if (isEmpty(front, rear)) {
+void insertElement(int arr[], int &frontIndex, int &backIndex, int maxSize) {
+    if (checkFull(backIndex, maxSize)) {
+        cout << "Queue overflow! Cannot insert." << endl;
+        return;
+    }
+    if (frontIndex == -1) {
+        frontIndex = 0;
+    }
+    int value;
+    cout << "Enter the value to insert: ";
+    cin >> value;
+    backIndex++;
+    arr[backIndex] = value;
+}
+
+void showFront(int arr[], int frontIndex, int backIndex) {
+    if (checkEmpty(frontIndex, backIndex)) {
         cout << "Queue is empty." << endl;
         return;
     }
-    cout << "The front element is: " << queue[front] << endl;
+    cout << "Front element: " << arr[frontIndex] << endl;
 }
 
-void display(int queue[], int front, int rear) {
-    if (isEmpty(front, rear)) {
+void showQueue(int arr[], int frontIndex, int backIndex) {
+    if (checkEmpty(frontIndex, backIndex)) {
         cout << "Queue is empty." << endl;
         return;
     }
-    cout << "Queue contents: ";
-    for (int i = front; i <= rear; i++) {
-        cout << queue[i] << " ";
+    cout << "Queue elements: ";
+    for (int i = frontIndex; i <= backIndex; i++) {
+        cout << arr[i] << " ";
     }
     cout << endl;
 }
 
 int main() {
-    int maxqueue;
-    cout << "Enter maximum queue size: ";
-    cin >> maxqueue;
+    int capacity;
+    cout << "Enter maximum size of queue: ";
+    cin >> capacity;
 
-    int *queue = new int[maxqueue];
-    int front = -1;
-    int rear = -1;
-    int choice, item;
+    int *arr = new int[capacity];
+    int frontIndex = -1, backIndex = -1;
+    int option, element;
 
     do {
-        cout << "\n--- Simple Queue Menu ---\n";
-        cout << "1. Enqueue\n";
-        cout << "2. Dequeue\n";
-        cout << "3. IsEmpty\n";
-        cout << "4. IsFull\n";
-        cout << "5. Peek\n";
-        cout << "6. Display\n";
+        cout << "\n--- Queue Operations Menu ---\n";
+        cout << "1. Insert (Enqueue)\n";
+        cout << "2. Remove (Dequeue)\n";
+        cout << "3. Check Empty\n";
+        cout << "4. Check Full\n";
+        cout << "5. Show Front\n";
+        cout << "6. Display Queue\n";
         cout << "7. Exit\n";
         cout << "Enter your choice: ";
-        cin >> choice;
+        cin >> option;
 
-        switch (choice) {
+        switch (option) {
             case 1:
-                enqueue(queue, front, rear, maxqueue);
+                insertElement(arr, frontIndex, backIndex, capacity);
                 break;
             case 2:
-                item = dequeue(queue, front, rear);
-                if (item != -1) {
-                    cout << "Dequeued item: " << item << endl;
-                } else {
-                    cout << "Queue is empty (Underflow)" << endl;
-                }
+                element = removeElement(arr, frontIndex, backIndex);
+                if (element != -1)
+                    cout << "Removed: " << element << endl;
+                else
+                    cout << "Queue underflow! Nothing to remove." << endl;
                 break;
             case 3:
-                if (isEmpty(front, rear)) {
-                    cout << "The queue is empty." << endl;
-                } else {
-                    cout << "The queue is not empty." << endl;
-                }
+                if (checkEmpty(frontIndex, backIndex))
+                    cout << "Queue is empty." << endl;
+                else
+                    cout << "Queue is not empty." << endl;
                 break;
             case 4:
-                if (isFull(rear, maxqueue)) {
-                    cout << "The queue is full." << endl;
-                } else {
-                    cout << "The queue is not full." << endl;
-                }
+                if (checkFull(backIndex, capacity))
+                    cout << "Queue is full." << endl;
+                else
+                    cout << "Queue is not full." << endl;
                 break;
             case 5:
-                peek(queue, front, rear);
+                showFront(arr, frontIndex, backIndex);
                 break;
             case 6:
-                display(queue, front, rear);
+                showQueue(arr, frontIndex, backIndex);
                 break;
             case 7:
-                cout << "Exiting..." << endl;
+                cout << "Exiting program" << endl;
                 break;
             default:
-                cout << "Invalid choice, try again." << endl;
+                cout << "Invalid option" << endl;
         }
-    } while (choice != 7);
+    } while (option != 7);
 
-    delete[] queue;
+    delete[] arr;
     return 0;
 }
