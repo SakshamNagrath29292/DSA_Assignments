@@ -11,7 +11,7 @@ bool isEmpty(int front) {
     return (front == -1);
 }
 
-void enqueue(int cq[], int &front, int &rear) {
+void addElement(int cq[], int &front, int &rear) {
     if (isFull(front, rear)) {
         cout << "Queue overflow!" << endl;
         return;
@@ -20,27 +20,26 @@ void enqueue(int cq[], int &front, int &rear) {
     cout << "Enter number to enqueue: ";
     cin >> item;
 
-    if (front == -1) front = 0; 
-    rear = (rear + 1) % MAX;    
+    if (front == -1) front = 0;
+    rear = (rear + 1) % MAX;
     cq[rear] = item;
     cout << item << " added." << endl;
 }
 
-void dequeue(int cq[], int &front, int &rear) {
+void removeElement(int cq[], int &front, int &rear) {
     if (isEmpty(front)) {
         cout << "Queue underflow!" << endl;
         return;
     }
     cout << "Removed: " << cq[front] << endl;
-
     if (front == rear) {
-        front = rear = -1; 
+        front = rear = -1;
     } else {
         front = (front + 1) % MAX;
     }
 }
 
-void peek(int cq[], int front, int rear) {
+void peekElement(int cq[], int front, int rear) {
     if (isEmpty(front)) {
         cout << "Queue is empty." << endl;
         return;
@@ -48,7 +47,7 @@ void peek(int cq[], int front, int rear) {
     cout << "Front element: " << cq[front] << endl;
 }
 
-void display(int cq[], int front, int rear) {
+void displayElements(int cq[], int front, int rear) {
     if (isEmpty(front)) {
         cout << "Queue is empty." << endl;
         return;
@@ -70,8 +69,8 @@ int main() {
 
     do {
         cout << "\n--- Circular Queue Menu ---\n";
-        cout << "1. Enqueue\n";
-        cout << "2. Dequeue\n";
+        cout << "1. Enqueue (Add)\n";
+        cout << "2. Dequeue (Remove)\n";
         cout << "3. IsEmpty\n";
         cout << "4. IsFull\n";
         cout << "5. Peek\n";
@@ -81,12 +80,12 @@ int main() {
         cin >> choice;
 
         switch (choice) {
-            case 1: enqueue(cq, front, rear); break;
-            case 2: dequeue(cq, front, rear); break;
+            case 1: addElement(cq, front, rear); break;
+            case 2: removeElement(cq, front, rear); break;
             case 3: cout << (isEmpty(front) ? "Empty" : "Not empty") << endl; break;
             case 4: cout << (isFull(front, rear) ? "Full" : "Not full") << endl; break;
-            case 5: peek(cq, front, rear); break;
-            case 6: display(cq, front, rear); break;
+            case 5: peekElement(cq, front, rear); break;
+            case 6: displayElements(cq, front, rear); break;
             case 7: cout << "Exiting..." << endl; break;
             default: cout << "Invalid choice" << endl;
         }
