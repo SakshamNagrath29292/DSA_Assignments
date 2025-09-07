@@ -1,87 +1,97 @@
 #include <iostream>
 using namespace std;
+
 const int m = 100;
 int arr[m];
 int n = 0;
+
 void create()
 {
-
-    cout << "ENTER THE NUMBER OF ELEMENTS IN THE ARRAY:";
+    cout << "ENTER THE NUMBER OF ELEMENTS IN THE ARRAY: ";
     cin >> n;
-    cout << endl;
-    cout << "ENTER THE ELEMENTS OF THE ARRAY";
+
+    cout << "ENTER THE ELEMENTS OF THE ARRAY:\n";
     for (int i = 0; i < n; i++)
     {
         cin >> arr[i];
-        cout << endl;
     }
 }
+
 void display()
 {
-
-    cout << "The elements of the array are";
+    cout << "The elements of the array are: ";
     for (int i = 0; i < n; i++)
     {
         cout << arr[i] << " ";
     }
-    return;
+    cout << endl;
 }
+
 void insert()
 {
     int pos;
-    cout << "ENTER AT THE POSTION TO ADD THE ELEMENT";
+    cout << "ENTER THE POSITION TO ADD THE ELEMENT: ";
     cin >> pos;
-    cout << endl;
-    if (pos >= 0 && pos <= n)
+
+    if (pos < 0 || pos > n)
     {
-        cout << "INVALID POSTION\n";
+        cout << "INVALID POSITION\n";
+        return;
     }
+
     int num;
-    cout << "ENTER THE NUMBER TO BE ADDED";
+    cout << "ENTER THE NUMBER TO BE ADDED: ";
     cin >> num;
-    cout << endl;
+
     for (int i = n; i > pos; i--)
     {
         arr[i] = arr[i - 1];
     }
     arr[pos] = num;
     n++;
-    return;
 }
+
 void deleteElement()
 {
     int pos;
-    cout << "enter the psotion to delete";
+    cout << "ENTER THE POSITION TO DELETE: ";
     cin >> pos;
-    cout << endl;
-    if (pos >= n || pos < 0)
+
+    if (pos < 0 || pos >= n)
     {
         cout << "INVALID POSITION\n";
         return;
     }
-    for (int i = pos; i < n; i++)
+
+    for (int i = pos; i < n - 1; i++)
     {
         arr[i] = arr[i + 1];
     }
     n--;
-    cout << "ELEMENT DELTED";
-    return;
+    cout << "ELEMENT DELETED\n";
 }
-int searchelement()
+
+void searchelement()
 {
     int search;
-    cout << "ENTER THE ELEMENT TO SEARCH";
+    cout << "ENTER THE ELEMENT TO SEARCH: ";
     cin >> search;
+
+    bool found = false;
     for (int i = 0; i < n; i++)
     {
         if (arr[i] == search)
         {
-            cout << "Element found at:" << i << endl;
+            cout << "Element found at position: " << i << endl;
+            found = true;
             break;
         }
     }
-    cout << "Element not found.\n";
+
+    if (!found)
+        cout << "Element not found.\n";
 }
+
 int main()
 {
     int choice;
