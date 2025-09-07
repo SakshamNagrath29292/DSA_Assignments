@@ -1,48 +1,37 @@
 #include <iostream>
 #include <queue>
-#include <stack>
-#include <limits>
-
 using namespace std;
 
-void interleaveQueue(queue<int> &q) {
-    if (q.size() % 2 != 0) {
-        cout << "Queue must have an even number of elements." << endl;
+void interleave(queue<int>& q) {
+    int n = q.size();
+    if (n % 2 != 0) {
+        cout << "Queue size must be even" << endl;
         return;
     }
 
-    stack<int> s;
-    int halfSize = q.size() / 2;
+    int halfSize = n / 2;
+    queue<int> firstHalf, secondHalf;
 
     for (int i = 0; i < halfSize; i++) {
-        s.push(q.front());
+        firstHalf.push(q.front());
         q.pop();
     }
 
-    while (!s.empty()) {
-        q.push(s.top());
-        s.pop();
-    }
-
-    for (int i = 0; i < halfSize; i++) {
-        q.push(q.front());
+    while (!q.empty()) {
+        secondHalf.push(q.front());
         q.pop();
     }
 
-    for (int i = 0; i < halfSize; i++) {
-        s.push(q.front());
-        q.pop();
-    }
+    while (!firstHalf.empty() && !secondHalf.empty()) {
+        q.push(firstHalf.front());
+        firstHalf.pop();
 
-    while (!s.empty()) {
-        q.push(s.top());
-        s.pop();
-        q.push(q.front());
-        q.pop();
+        q.push(secondHalf.front());
+        secondHalf.pop();
     }
 }
 
-void printQueue(queue<int> q) {
+void show(queue<int> q) {
     while (!q.empty()) {
         cout << q.front() << " ";
         q.pop();
@@ -52,37 +41,17 @@ void printQueue(queue<int> q) {
 
 int main() {
     queue<int> q;
-    int n, element;
-
-    cout << "Enter the number of elements (must be even): ";
-    cin >> n;
-
-    while (cin.fail() || n <= 0 || n % 2 != 0) {
-        cout << "Invalid input. Please enter a positive even number: ";
-        cin.clear();
-        cin.ignore(numeric_limits<streamsize>::max(), '\n');
-        cin >> n;
+    for (int i = 1; i <= 8; i++) {
+        q.push(i);
     }
 
-    cout << "Enter " << n << " elements:" << endl;
-    for (int i = 0; i < n; i++) {
-        cin >> element;
-        while (cin.fail()) {
-            cout << "Invalid input. Please enter a number: ";
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            cin >> element;
-        }
-        q.push(element);
-    }
+    cout << "Original Queue: ";
+    show(q);
 
-    cout << "Original queue: ";
-    printQueue(q);
+    interleave(q);
 
-    interleaveQueue(q);
-
-    cout << "Interleaved queue: ";
-    printQueue(q);
+    cout << "Interleaved Queue: ";
+    show(q);
 
     return 0;
 }
