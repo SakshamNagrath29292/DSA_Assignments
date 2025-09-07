@@ -1,34 +1,38 @@
 #include <iostream>
 using namespace std;
-int main(){
-   int n;
-   cout<<"Enter the number of elements in the array";
-   cin>>n;
-   cout<<endl;
-   int a[n];
-    cout<<"enter the elements of the array";
-   for(int i=0;i<n;i++){
-        cin>>a[i];
-        cout<<endl;
-   }
-   for(int i=0;i<n;i++){
-    cout<<a[i]<<" ";
-   }
-   for(int i=0;i<n-1;i++){
-      if(a[i]==a[i+1]){
-         for(int j=i+1;j<n-1;j++){
-            a[j]=a[j+1];
-         }
-         n--;
-         i--;
-      }
-   }
-   cout<<endl;
-   for(int i=0;i<n;i++){
-      cout<<a[i]<<" ";
-   }
-   
-   return 0;
 
+int main() {
+    int n;
+    cout << "Enter the number of elements in the array: ";
+    cin >> n;
 
+    int a[100]; 
+    cout << "Enter the elements of the array: ";
+    for (int i = 0; i < n; i++) {
+        cin >> a[i];
+    }
+
+    cout << "Original array: ";
+    for (int i = 0; i < n; i++) cout << a[i] << " ";
+    cout << endl;
+
+    int unique[100]; 
+    int k = 0;      
+
+    for (int i = 0; i < n; i++) {
+        int j;
+        for (j = 0; j < k; j++) {
+            if (a[i] == unique[j]) break;
+        }
+        if (j == k) {      
+            unique[k] = a[i];
+            k++;
+        }
+    }
+
+    cout << "Array after removing all duplicates: ";
+    for (int i = 0; i < k; i++) cout << unique[i] << " ";
+    cout << endl;
+
+    return 0;
 }
