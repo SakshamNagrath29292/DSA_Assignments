@@ -1,75 +1,54 @@
 #include <iostream>
-
 using namespace std;
 
 struct Node {
     int data;
     Node* next;
+    Node(int val) : data(val), next(NULL) {}
 };
 
-void insertAtEnd(Node* &head, int value) {
-    Node* newNode = new Node();
-    newNode->data = value;
-    newNode->next = nullptr;
-
-    if (head == nullptr) {
-        head = newNode;
-    } else {
-        Node* temp = head;
-        while (temp->next != nullptr) {
-            temp = temp->next;
-        }
-        temp->next = newNode;
-    }
-}
-
-void displayList(Node* head) {
-    if (head == nullptr) {
-        cout << "List is empty." << endl;
+void insertEnd(Node*& head, int data) {
+    Node* n = new Node(data);
+    if (!head) {
+        head = n;
         return;
     }
-    Node* temp = head;
-    while (temp != nullptr) {
-        cout << temp->data << " -> ";
-        temp = temp->next;
+    Node* t = head;
+    while (t->next) t = t->next;
+    t->next = n;
+}
+
+void printList(Node* head) {
+    while (head) {
+        cout << head->data << "->";
+        head = head->next;
     }
     cout << "NULL" << endl;
 }
 
-void reverseList(Node* &head) {
-    Node* previousNode = nullptr;
-    Node* currentNode = head;
-    Node* nextNode = nullptr;
-
-    while (currentNode != nullptr) {
-        nextNode = currentNode->next;
-        currentNode->next = previousNode;
-        previousNode = currentNode;
-        currentNode = nextNode;
+Node* reverseList(Node* head) {
+    Node* prev = NULL;
+    Node* cur = head;
+    Node* nxt;
+    while (cur) {
+        nxt = cur->next;
+        cur->next = prev;
+        prev = cur;
+        cur = nxt;
     }
-    head = previousNode;
+    return prev;
 }
 
 int main() {
-    Node* head = nullptr;
-    int numberOfNodes, value;
-
-    cout << "Enter the number of nodes to create: ";
-    cin >> numberOfNodes;
-
-    for (int i = 0; i < numberOfNodes; i++) {
-        cout << "Enter value for node " << i + 1 << ": ";
-        cin >> value;
-        insertAtEnd(head, value);
-    }
-
-    cout << "\nOriginal List: ";
-    displayList(head);
-
-    reverseList(head);
-
+    Node* head = NULL;
+    insertEnd(head, 1);
+    insertEnd(head, 2);
+    insertEnd(head, 3);
+    insertEnd(head, 4);
+    cout << "Original List: ";
+    printList(head);
+    head = reverseList(head);
     cout << "Reversed List: ";
-    displayList(head);
-
+    printList(head);
     return 0;
 }
