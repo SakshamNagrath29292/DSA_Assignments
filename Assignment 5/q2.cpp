@@ -1,90 +1,72 @@
 #include <iostream>
-
 using namespace std;
 
 struct Node {
     int data;
     Node* next;
+    Node(int val) : data(val), next(NULL) {}
 };
 
-void insertAtEnd(Node* &head, int value) {
-    Node* newNode = new Node();
-    newNode->data = value;
-    newNode->next = nullptr;
-
-    if (head == nullptr) {
+void insertEnd(Node*& head, int data) {
+    Node* newNode = new Node(data);
+    if (!head) {
         head = newNode;
-    } else {
-        Node* temp = head;
-        while (temp->next != nullptr) {
-            temp = temp->next;
-        }
-        temp->next = newNode;
-    }
-}
-
-void displayList(Node* head) {
-    if (head == nullptr) {
-        cout << "List is empty." << endl;
         return;
     }
     Node* temp = head;
-    while (temp != nullptr) {
-        cout << temp->data << " -> ";
+    while (temp->next) {
         temp = temp->next;
     }
-    cout << "NULL" << endl;
+    temp->next = newNode;
 }
 
-int countAndDeleteOccurrences(Node* &head, int key) {
-    int count = 0;
-    Node* currentNode = head;
-    Node* previousNode = nullptr;
+void printList(Node* head) {
+    Node* temp = head;
+    while (temp) {
+        cout << temp->data;
+        if (temp->next) cout << "->";
+        temp = temp->next;
+    }
+    cout << endl;
+}
 
-    while (currentNode != nullptr) {
-        if (currentNode->data == key) {
+int deleteOccurrences(Node*& head, int key) {
+    int count = 0;
+    while (head && head->data == key) {
+        Node* t = head;
+        head = head->next;
+        delete t;
+        count++;
+    }
+    Node* cur = head;
+    while (cur && cur->next) {
+        if (cur->next->data == key) {
+            Node* t = cur->next;
+            cur->next = cur->next->next;
+            delete t;
             count++;
-            Node* nodeToDelete = currentNode;
-            if (previousNode == nullptr) {
-                head = currentNode->next;
-                currentNode = head;
-            } else {
-                previousNode->next = currentNode->next;
-                currentNode = currentNode->next;
-            }
-            delete nodeToDelete;
         } else {
-            previousNode = currentNode;
-            currentNode = currentNode->next;
+            cur = cur->next;
         }
     }
     return count;
 }
 
 int main() {
-    Node* head = nullptr;
-    int numberOfNodes, value, key;
-
-    cout << "Enter the number of nodes to create: ";
-    cin >> numberOfNodes;
-
-    for (int i = 0; i < numberOfNodes; i++) {
-        cout << "Enter value for node " << i + 1 << ": ";
-        cin >> value;
-        insertAtEnd(head, value);
-    }
-
-    cout << "\nOriginal Linked List: ";
-    displayList(head);
-
-    cout << "Enter the key to count and delete: ";
-    cin >> key;
-
-    int occurrences = countAndDeleteOccurrences(head, key);
-
-    cout << "\nNumber of occurrences of " << key << ": " << occurrences << endl;
+    Node* head = NULL;
+    insertEnd(head, 1);
+    insertEnd(head, 2);
+    insertEnd(head, 1);
+    insertEnd(head, 2);
+    insertEnd(head, 1);
+    insertEnd(head, 3);
+    insertEnd(head, 1);
+    int key = 1;
+    cout << "Original Linked List: ";
+    printList(head);
+    int count = deleteOccurrences(head, key);
+    cout << "Count: " << count << endl;
     cout << "Updated Linked List: ";
-    displayList(head);
-
+    printList(head);
     return 0;
 }
